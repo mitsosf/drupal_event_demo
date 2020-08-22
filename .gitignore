@@ -21,3 +21,4 @@ web/sites/simpletest
 
 # Ignore Intellij files
 .idea
+web/.idea
