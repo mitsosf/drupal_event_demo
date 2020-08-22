@@ -1,0 +1,7 @@
+rsvp_list.form:
+  path: '/rsvp_list'
+  defaults:
+    _form: '\Drupal\rsvp_list\Form\RSVPForm'
+    _title: 'Event RSVP'
+  requirements:
+    _permission: 'view rsvp_list'
