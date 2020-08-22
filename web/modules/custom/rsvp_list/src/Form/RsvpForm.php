@@ -7,7 +7,7 @@ use Drupal;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
-class RSVPForm extends FormBase
+class RsvpForm extends FormBase
 {
 
   public function getFormId()

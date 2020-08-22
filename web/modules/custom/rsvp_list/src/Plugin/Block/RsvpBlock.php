@@ -17,12 +17,12 @@ use Drupal\Core\Session\AccountInterface;
  *   admin_label = @Translation("RSVP List Block"),
  *   )
  */
-class RSVPBlock extends BlockBase
+class RsvpBlock extends BlockBase
 {
 
   public function build()
   {
-    return Drupal::formBuilder()->getForm('Drupal\rsvp_list\Form\RSVPForm');
+    return Drupal::formBuilder()->getForm('Drupal\rsvp_list\Form\RsvpForm');
   }
 
   public function blockAccess(AccountInterface $account)
