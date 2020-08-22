@@ -4,6 +4,7 @@ namespace Drupal\rsvp_list\Form;
 
 
 use Drupal;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -45,8 +46,10 @@ class RsvpForm extends FormBase
     $email = $form_state->getValue('email');
     if (!Drupal::service('email.validator')->isValid($email)) {
       $form_state->setErrorByName('email', t('Invalid email address'));
+      return;
     }
 
+    $this->validateEmailNotInEvent($form_state, $email);
   }
 
   public function submitForm(array &$form, FormStateInterface $form_state)
@@ -65,6 +68,27 @@ class RsvpForm extends FormBase
     }
 
     Drupal::messenger()->addMessage(t('Successful submission'), 'status');
+  }
+
+  private function validateEmailNotInEvent(FormStateInterface &$form_state, string $email): void
+  {
+    $node = Drupal::routeMatch()->getParameter('node');
+
+    $result = false;
+    try{
+      $query = Database::getConnection()->select('rsvp_list_', 'r');
+      $query->fields('r', ['nid']);
+      $query->condition('nid', $node->id);
+      $query->condition('mail', $email);
+      $result = $query->execute();
+    } catch (\Exception $e){
+      //Log exception
+    }
+
+    if ($result && !empty($result->fetchCol())){
+      $form_state->setErrorByName('email', t('%email is already subscribed to this event'));
+      return;
+    }
   }
 }
 

@@ -28,10 +28,11 @@ class RsvpBlock extends BlockBase
   public function blockAccess(AccountInterface $account)
   {
     $node = Drupal::routeMatch()->getParameter('node');
-    $nid = $node->nid->value;
-
-    if (is_numeric($nid)) {
-      return AccessResult::allowedIfHasPermission($account, 'view rsvp_list');
+    if (!empty($node)) {
+      $nid = $node->nid->value;
+      if (is_numeric($nid)) {
+        return AccessResult::allowedIfHasPermission($account, 'view rsvp_list');
+      }
     }
 
     return AccessResult::forbidden();
