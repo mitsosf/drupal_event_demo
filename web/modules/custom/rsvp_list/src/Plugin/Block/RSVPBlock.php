@@ -3,8 +3,11 @@
 namespace Drupal\rsvp_list\Plugin\Block;
 
 
+use Drupal;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Block\Annotation\Block;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Provides RSVP List Block
@@ -14,10 +17,23 @@ use Drupal\Core\Block\Annotation\Block;
  *   admin_label = @Translation("RSVP List Block"),
  *   )
  */
-class RSVPBlock extends BlockBase{
+class RSVPBlock extends BlockBase
+{
 
   public function build()
   {
-    return ['#markup' => t('RSVP List Block')];
+    return Drupal::formBuilder()->getForm('Drupal\rsvp_list\Form\RSVPForm');
+  }
+
+  public function blockAccess(AccountInterface $account)
+  {
+    $node = Drupal::routeMatch()->getParameter('node');
+    $nid = $node->nid->value;
+
+    if (is_numeric($nid)) {
+      return AccessResult::allowedIfHasPermission($account, 'view rsvp_list');
+    }
+
+    return AccessResult::forbidden();
   }
 }
