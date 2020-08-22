@@ -15,7 +15,7 @@ class EnablerService
 
   public function enableNode(Node $node): bool
   {
-    if (!$this->getNodeStatus($node)) {
+    if (!$this->isEnabled($node)) {
       try {
         $query = Database::getConnection()->insert('rsvp_list_enabled');
         $query->fields(['nid'], [$node->id()]);
@@ -44,7 +44,7 @@ class EnablerService
     return false;
   }
 
-  public function getNodeStatus(Node $node): bool
+  public function isEnabled(Node $node): bool
   {
     if ($node->isNew()) {
       return false;

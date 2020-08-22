@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\rsvp_list\Service\EnablerService;
 
 /**
  * Implements hook_form_alter().
@@ -32,7 +33,7 @@ function rsvp_list_form_node_form_alter(&$form, \Drupal\Core\Form\FormStateInter
     $form['rsvp_list']['rsvp_list_enabled'] = [
       '#type' => 'checkbox',
       '#title' => t('Collect RSVP e-mail addresses for this node.'),
-      '#default_value' => $enabler->getNodeStatus($node),
+      '#default_value' => $enabler->isEnabled($node),
     ];
 
     foreach (array_keys($form['actions']) as $action) {
